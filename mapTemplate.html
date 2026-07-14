@@ -80,11 +80,23 @@ function renderFiltered(fromStr, toStr) {
   });
 
   let bounds = [];
-  for (const p of filtered) {
-    const lat = p.lat, lon = p.lon;
-    if (typeof lat !== 'number' || typeof lon !== 'number') continue;
-    // ...
+for (const p of filtered) {
+  const lat = p.lat, lon = p.lon;
+
+  const latType = typeof lat;
+  const lonType = typeof lon;
+
+  if (typeof lat !== 'number' || typeof lon !== 'number') {
+    console.log("marker skip: lat/lon not numbers", { lat, lon, latType, lonType, uid: p.uid, date: p.date });
+    continue;
   }
+  if (Number.isNaN(lat) || Number.isNaN(lon)) {
+    console.log("marker skip: lat/lon is NaN", { lat, lon, uid: p.uid, date: p.date });
+    continue;
+  }
+
+  // existing marker creation follows...
+}
 
   clusterGroup.addTo(map);
   console.log("renderFiltered: markers added to clusterGroup", { boundsCount: bounds.length });
@@ -135,7 +147,10 @@ display_name: parts[idx.display_name],
 country_code: parts[idx.country_code]
 };
 });
+
 console.log("loadMapData: parsed points", allPoints.length);
+console.log("sample point 0", allPoints[0]);
+console.log("sample point 1", allPoints[1]);
  
 const dates = allPoints.map(p => p.date).filter(Boolean).sort();
 const min = dates[0] || "";
