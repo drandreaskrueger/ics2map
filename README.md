@@ -19,7 +19,20 @@ Locations are stored in `LOCATION:...` lines.
 
 With the help of an [AI](AI/AI-log.md), the code here was created.
 
-## creation log
+## run creates outputs
+
+    python makeMap.py
+
+created at runtime:
+
+    outputs/
+      log.txt
+      geocodeCache.csv
+      geocodeFailed.csv
+      map.html
+      mapData.csv
+
+## repo creation log
 ### venv in windows
 
     c:
@@ -40,5 +53,8 @@ Choose LGPL2.1 license, Python .gitignore, etc.
 
 
 ### AI supported coding
-See [AI-log.md](AI/AI-log.md) for the full conversation, that created this code.
+See [AI-log.md](AI/AI-log.md) for the full conversation that created this code.
+
+
+
 
