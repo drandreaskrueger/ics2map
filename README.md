@@ -36,7 +36,7 @@ With the help of an [AI](AI-log.md), the code here was created.
 Choose LGPL2.1 license, Python .gitignore, etc.
 
     git config user.name "Andreas Krueger"
-    git config user.email "github.com/drandreaskrueger"
+    git config user.email "find-my-repo@instead.of.using.this.fake.email"
 
 
 ### AI supported coding
