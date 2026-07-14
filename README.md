@@ -33,12 +33,16 @@ created at runtime:
       mapData.csv
 
 ## repo creation log
-### venv in windows
+### venv in windows using python 3.14
 
     c:
-    cd C:\_DATA\CODE\_ECLIPSE-WS\_ENVS
     
-    python -m venv ics2map
+    winget install 9NQ7512CXL7T # install Python install manager
+    py install 3.14 # install Python 3.14
+     
+    cd C:\_DATA\CODE\_ECLIPSE-WS\_ENVS # venvs in my workspace
+    
+    py -3.14 -m venv ics2map
     ics2map\Scripts\activate.bat
     python.exe -m pip install --upgrade pip
     
