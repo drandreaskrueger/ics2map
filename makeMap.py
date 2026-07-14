@@ -126,6 +126,14 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
             writer.writerow(r)
 
     logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_csv_path}")
+    
+    map_data_json_path = os.path.join(output_dir, geo_cfg["mapDataCsv"]).replace(".csv", ".json")
+
+    with open(map_data_json_path, "w", encoding="utf-8") as f:
+        json.dump(map_rows, f, ensure_ascii=False)
+        
+    logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_json_path}")
+
     return map_rows
 
 
