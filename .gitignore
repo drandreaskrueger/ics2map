@@ -1,8 +1,13 @@
 # added by me
 Festivals_v08_exported-20260710.ics
+calendar.ics
+
 .project
 .pydevproject
+
 geocodeCredentials.toml
+
+outputs/
 
 # preset "Python" done by github:
 
