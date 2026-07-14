@@ -17,7 +17,7 @@ In a 2nd step, candidates were turned into calendar entries.
 Exported as ICS file (Internet Calendaring and Scheduling Core Object Specification). 
 Locations are stored in `LOCATION:...` lines.
 
-With the help of an [AI](AI-log.md), the code here was created.
+With the help of an [AI](AI/AI-log.md), the code here was created.
 
 ## creation log
 ### venv in windows
@@ -40,5 +40,5 @@ Choose LGPL2.1 license, Python .gitignore, etc.
 
 
 ### AI supported coding
-See [AI-log.md](AI-log.md) for the full conversation, that created this code.
+See [AI-log.md](AI/AI-log.md) for the full conversation, that created this code.
 
