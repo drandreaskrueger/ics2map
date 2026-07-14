@@ -1,0 +1,29 @@
+
+
+Fantastic, thanks. I have created a repo, and will be publishing this code; and for better maintenance, we need to refactor. Please split your code into such code files, and create the missing routines that e.g. write log files, fail files, etc.
+
+config.toml:
+e.g. importICS: dateFrom, dateTo, countries=DE,AT,CZ,HU,PL,NL,SI,RO,CH,HR,GR
+e.g. geoCode: geocodeCache.csv, rateLimitSeconds=1.1, etc.
+e.g. makeMap: style.css, dateslider=ON, dateformat=YYYY-MM-DD, etc
+
+geocodeCredentialsFile.toml: Separate so that it can be hidden via .gitignore
+
+importICS.py = calendar ICS import, using the select conditions from config.toml
+
+geocode.py = talking to the geocode webservice, storing successful (lat,long) in keyvalue store geocodeCache.py for not repeating successful calls; geocodeFailed.csv = (human readable location input, webservice error message)
+
+loggingTools.py = logging should end up in several files (see above), AND in one log.txt (e.g. one line per imported ICS event, one line per failed/succeeded geocoding, etc.). Keep the screen output to aggregates (e.g. 73 events geocoded, 7 failed, 65 succeeded, 2 missing location)
+
+makeMap.py = main, binding all together.
+
+
+outputs:
+* log.txt
+* geocodeCache.csv
+* geocodeFailed.csv 
+* map.html, mapData.csv
+
+Coding principles: Every function has a human readable explanation inside. Focus on maintainability, and human readability. Good balance between (modularity and reusability of functions) and (not too many functions overall). After this first radical refactoring, for future refactor steps, keep the existing structure as much as possible; for easier comparison to before. Choose short but meaningful variable names, function names can be longer too. Mark code pieces where you are insecure or aware that they could fail to execute. Especially for web access, use error handling try-except blocks with logging of the Exception name. Enjoy your work.
+
+ 
