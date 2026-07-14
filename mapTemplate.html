@@ -29,7 +29,7 @@ button { margin-top: 6px; }
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 </head>
 <body>
-{controls_block}
+__CONTROLS_BLOCK__
 <div id="map"></div>
 <script>
 const map = L.map('map', { zoomSnap: 0.25 });
@@ -140,7 +140,7 @@ loadMapData().catch(e => {{
 console.error(e);
 map.setView([51.0, 10.0], 4);
 }});
-{maybe_apply_listener}
+__MAYBE_APPLY_LISTENER__
 </script>
 </body>
 </html>

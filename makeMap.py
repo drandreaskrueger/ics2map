@@ -155,9 +155,10 @@ renderFiltered(fromVal, toVal);
         logger.error(f"Failed to read mapTemplate.html: {type(e).__name__}: {e}")
         raise
 
-    html = template.format(
-        controls_block=controls_block,
-        maybe_apply_listener=maybe_apply_listener,
+    html = (
+        template
+        .replace("__CONTROLS_BLOCK__", controls_block)
+        .replace("__MAYBE_APPLY_LISTENER__", maybe_apply_listener)
     )
 
     with open(map_html_path, "w", encoding="utf-8") as f:
