@@ -37,37 +37,37 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 maxZoom: 19,
 attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
-function escapeHtml(str) {{
+function escapeHtml(str) {
 return (str ?? "").toString()
 .replaceAll('&','&amp;')
 .replaceAll('<','&lt;')
 .replaceAll('>','&gt;')
 .replaceAll('"','&quot;')
 .replaceAll("'","&#039;");
-}}
+}
 let allPoints = [];
 let clusterGroup = null;
-function dateInRange(dateStr, fromStr, toStr) {{
+function dateInRange(dateStr, fromStr, toStr) {
 if (!dateStr) return false;
 if (fromStr && dateStr < fromStr) return false;
 if (toStr && dateStr > toStr) return false;
 return true;
-}}
-function renderFiltered(fromStr, toStr) {{
-if (clusterGroup) {{
+}
+function renderFiltered(fromStr, toStr) {
+if (clusterGroup) {
 map.removeLayer(clusterGroup);
 clusterGroup = null;
-}}
+}
 const filtered = allPoints.filter(p => dateInRange(p.date, fromStr || "", toStr || ""));
 document.getElementById('status').textContent =
 filtered.length ? `Showing ${filtered.length} event(s)` : 'No events in range';
-clusterGroup = L.markerClusterGroup({{
+clusterGroup = L.markerClusterGroup({
 chunkedLoading: true,
 showCoverageOnHover: true,
 maxClusterRadius: 50
-}});
+});
 let bounds = [];
-for (const p of filtered) {{
+for (const p of filtered) {
 const lat = p.lat, lon = p.lon;
 if (typeof lat !== 'number' || typeof lon !== 'number') continue;
 const loc = p.location_text || "";
@@ -76,32 +76,32 @@ const summary = p.summary || "";
 const date = p.date || "";
 const popupHtml = `
 <div style="max-width:280px;">
-<div style="font-weight:700; margin-bottom:4px;">${{escapeHtml(summary || 'Event')}}</div>
-<div style="font-size:12px;"><b>Date:</b> ${{escapeHtml(date)}}</div>
-<div style="font-size:12px; margin-top:4px;"><b>Location:</b> ${{escapeHtml(loc)}}</div>
-<div style="font-size:12px; margin-top:4px;"><b>Geocoder:</b> ${{escapeHtml(display)}}</div>
+<div style="font-weight:700; margin-bottom:4px;">${escapeHtml(summary || 'Event')}</div>
+<div style="font-size:12px;"><b>Date:</b> ${escapeHtml(date)}</div>
+<div style="font-size:12px; margin-top:4px;"><b>Location:</b> ${escapeHtml(loc)}</div>
+<div style="font-size:12px; margin-top:4px;"><b>Geocoder:</b> ${escapeHtml(display)}</div>
 </div>
 `;
-const marker = L.circleMarker([lat, lon], {{
+const marker = L.circleMarker([lat, lon], {
 radius: 7,
 weight: 1,
 color: '#2563eb',
 fillColor: '#3b82f6',
 fillOpacity: 0.85
-}}).bindPopup(popupHtml);
+}).bindPopup(popupHtml);
 marker.addTo(clusterGroup);
 bounds.push([lat, lon]);
-}}
+}
 clusterGroup.addTo(map);
 if (bounds.length) map.fitBounds(L.latLngBounds(bounds).pad(0.15));
-}}
-async function loadMapData() {{
+}
+async function loadMapData() {
 /* load mapData.csv converted to JS objects is done by a simple fetch+parse in JS */
 const resp = await fetch('mapData.csv');
 const text = await resp.text();
 const lines = text.trim().split('\\n');
 const header = lines.shift().split(',');
-const idx = {{
+const idx = {
 summary: header.indexOf('summary'),
 uid: header.indexOf('uid'),
 date: header.indexOf('date'),
@@ -110,14 +110,14 @@ lat: header.indexOf('lat'),
 lon: header.indexOf('lon'),
 display_name: header.indexOf('display_name'),
 country_code: header.indexOf('country_code')
-}};
-allPoints = lines.map(line => {{
+};
+allPoints = lines.map(line => {
 /* naive CSV split; safe enough for your expected dataset.
    Marked: could fail if fields contain commas. */
 const parts = line.split(',');
 const lat = parseFloat(parts[idx.lat]);
 const lon = parseFloat(parts[idx.lon]);
-return {{
+return {
 summary: parts[idx.summary],
 uid: parts[idx.uid],
 date: parts[idx.date],
@@ -126,8 +126,8 @@ lat: lat,
 lon: lon,
 display_name: parts[idx.display_name],
 country_code: parts[idx.country_code]
-}};
-}});
+};
+});
 const dates = allPoints.map(p => p.date).filter(Boolean).sort();
 const min = dates[0] || "";
 const max = dates[dates.length - 1] || "";
@@ -135,11 +135,11 @@ if (document.getElementById('fromDate')) document.getElementById('fromDate').val
 if (document.getElementById('toDate')) document.getElementById('toDate').value = max;
 renderFiltered(min, max);
 return allPoints;
-}}
-loadMapData().catch(e => {{
+}
+loadMapData().catch(e => {
 console.error(e);
 map.setView([51.0, 10.0], 4);
-}});
+});
 __MAYBE_APPLY_LISTENER__
 </script>
 </body>
