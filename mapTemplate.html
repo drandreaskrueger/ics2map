@@ -80,6 +80,7 @@ function renderFiltered(fromStr, toStr) {
   });
 
   let bounds = [];
+
 for (const p of filtered) {
   const lat = p.lat, lon = p.lon;
 
@@ -95,8 +96,32 @@ for (const p of filtered) {
     continue;
   }
 
-  // existing marker creation follows...
+  const loc = p.location_text || "";
+  const display = p.display_name || "";
+  const summary = p.summary || "";
+  const date = p.date || "";
+
+  const popupHtml = `
+    <div style="max-width:280px;">
+      <div style="font-weight:700; margin-bottom:4px;">${escapeHtml(summary || 'Event')}</div>
+      <div style="font-size:12px;"><b>Date:</b> ${escapeHtml(date)}</div>
+      <div style="font-size:12px; margin-top:4px;"><b>Location:</b> ${escapeHtml(loc)}</div>
+      <div style="font-size:12px; margin-top:4px;"><b>Geocoder:</b> ${escapeHtml(display)}</div>
+    </div>
+  `;
+
+  const marker = L.circleMarker([lat, lon], {
+    radius: 7,
+    weight: 1,
+    color: '#2563eb',
+    fillColor: '#3b82f6',
+    fillOpacity: 0.85
+  }).bindPopup(popupHtml);
+
+  marker.addTo(clusterGroup);
+  bounds.push([lat, lon]);
 }
+
 
   clusterGroup.addTo(map);
   console.log("renderFiltered: markers added to clusterGroup", { boundsCount: bounds.length });
