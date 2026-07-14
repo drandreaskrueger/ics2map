@@ -140,11 +140,14 @@ def write_map_html(cfg, output_dir, logger):
     controls_block = build_controls_block(date_slider)
 
     maybe_apply_listener = """
-document.getElementById('applyBtn')?.addEventListener('click', () => {
-const fromVal = document.getElementById('fromDate').value;
-const toVal = document.getElementById('toDate').value;
-renderFiltered(fromVal, toVal);
-});
+const applyBtn = document.getElementById('applyBtn');
+if (applyBtn) {
+  applyBtn.addEventListener('click', () => {
+    const fromVal = document.getElementById('fromDate').value;
+    const toVal = document.getElementById('toDate').value;
+    renderFiltered(fromVal, toVal);
+  });
+}
 """
 
     # Marked: could fail if mapTemplate.html missing; log then re-raise.

@@ -60,7 +60,7 @@ clusterGroup = null;
 }}
 const filtered = allPoints.filter(p => dateInRange(p.date, fromStr || "", toStr || ""));
 document.getElementById('status').textContent =
-filtered.length ? `Showing ${{filtered.length}} event(s)` : 'No events in range';
+filtered.length ? `Showing ${filtered.length} event(s)` : 'No events in range';
 clusterGroup = L.markerClusterGroup({{
 chunkedLoading: true,
 showCoverageOnHover: true,
