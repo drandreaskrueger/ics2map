@@ -8,6 +8,13 @@ from loggingTools import Logger, LogAgg
 from geocodeCache import GeocodeCache
 from geocode import geocode_events
 
+from htmlTools import build_controls_block
+
+from htmlTools import (
+    write_map_html,
+    copy_map_assets_to_output_dir,
+)
+
 
 def load_config_and_init_logging(logger_output_dir: str):
     
@@ -134,3 +141,10 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
     logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_json_path}")
 
     return map_rows
+
+# TODO:
+def create_map_html_with_assets():
+    """Create the HTML map output and copy required assets into the output directory."""
+    # CAREFUL: keep call order identical to previous main() logic.
+    write_map_html()
+    copy_map_assets_to_output_dir()
