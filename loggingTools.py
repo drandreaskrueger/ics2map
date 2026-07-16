@@ -1,8 +1,6 @@
 import os
 import time
 from dataclasses import dataclass
-from typing import Optional
-
 
 @dataclass
 class LogAgg:

@@ -1,5 +1,6 @@
 import os
 import tomllib  # Python 3.11+
+
 from loggingTools import Logger
 
 def build_controls_block(enabled: bool) -> str:
