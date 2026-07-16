@@ -1,0 +1,22 @@
+Help me improve the repo: 
+
+From now now, your coding principles are: 
+
+* Every function has a human readable explanation inside. 
+* Good balance between (modularity and reusability of functions) and (not too many functions overall).
+* Focus on maintainability, human readability, and continuity between versions. 
+* When refactoring, keep existing structures as much as possible; for easier comparison to before.
+* Side note: If radical refactoring has huge advantages, explain and ask, then I probably agree.
+* Short but meaningful variable names, function names can be longer.
+* Mark code pieces with comment '#CAREFUL: ...' where you are insecure or aware that they could fail to execute.
+* Especially for web access, use error handling try-except blocks with logging of the Exception name.
+* Logging to file is verbose, logging to screen is concise (e.g. file: one line per processed object, screen: one dot per object (incl flush(), for piping), and aggregates summary afterwards), 
+* If you encounter to be processed objects with missing data or errors, don't drop them silently, but log them to a separate CSV
+* main() is short, only contains the calls to the sequence of processing steps.
+* separate out content by filetypes, e.g. do not mix HTML and Javascript into one .html file, but also use .js files
+* where the language allows, use indentation, for readability of functions, loops, if, etc.
+* Don't always suggest a next thing. My ideas come first, but I occasionally appreciate your fixes or feature suggestions.
+* When I ask "what next?", answer with bulleted, concise list of yet unsolved suggestions of yours.
+* Enjoy your work.
+
+No answer needed, only if you'd suggest something else here. Otherwise just say: Yes.
