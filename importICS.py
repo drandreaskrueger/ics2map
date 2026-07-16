@@ -2,6 +2,9 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional, Tuple
+import os
+import tomllib  # Python 3.11+
+from loggingTools import Logger
 
 from ics import Calendar
 
@@ -97,3 +100,29 @@ def load_events_from_ics(
         ))
 
     return events
+
+def _load_config():
+    with open("config.toml", "rb") as f:
+        return tomllib.load(f)
+
+if __name__ == "__main__":
+    cfg = _load_config()
+    output_dir = cfg["outputDir"]
+    os.makedirs(output_dir, exist_ok=True)
+
+    logger = Logger(os.path.join(output_dir, "log.txt"))
+
+    ics_path = cfg["icsPath"]
+    date_from = cfg["importICS"]["dateFrom"]
+    date_to = cfg["importICS"]["dateTo"]
+    require_location = cfg["importICS"].get("requireLocation", True)
+
+    logger.info(f"Debug importICS: reading {ics_path}")
+    events = load_events_from_ics(
+        ics_path=ics_path,
+        date_from=date_from,
+        date_to=date_to,
+        require_location=require_location,
+    )
+    logger.info(f"Debug importICS: selected events={len(events)}")
+    print(f"Selected events: {len(events)}")
