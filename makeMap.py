@@ -175,6 +175,25 @@ if (applyBtn) {
     with open(map_html_path, "w", encoding="utf-8") as f:
         f.write(html)
 
+def copy_map_assets_to_output_dir(output_dir: str, logger):
+    """
+    Copy map-related static assets (CSS/JS) into the output directory,
+    so outputs/map.html can reference them.
+    """
+    for asset_name in ["mapScripts.js", "mapStyles.css"]:
+        src_path = os.path.join(".", asset_name)
+        dst_path = os.path.join(output_dir, asset_name)
+        try:
+            with open(src_path, "rb") as fsrc:
+                data = fsrc.read()
+            with open(dst_path, "wb") as fdst:
+                fdst.write(data)
+            logger.info(f"Copied asset: {asset_name}")
+        except Exception as e:
+            logger.error(f"copy_map_assets_to_output_dir failed: {type(e).__name__}: {e}")
+            raise
+
+
 
 def main():
     """
@@ -191,6 +210,8 @@ def main():
 
     events = load_selected_ics_events(cfg, agg, logger)
     _ = run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir)
+    
+    copy_map_assets_to_output_dir(output_dir, logger)
     write_map_html(cfg, output_dir, logger)
 
     logger.info("Pipeline complete")
