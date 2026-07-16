@@ -14,23 +14,28 @@ from htmlTools import (
 
 
 def load_config_and_init_logging(logger_output_dir: str):
-    
-    
     """
     Load config.toml and set up logger and aggregates.
     Returns (cfg, output_dir, logger, agg).
     """
-    # Marked: could fail if config.toml missing/invalid; keep it obvious at top-level.
+    # CAREFUL: could fail if config.toml missing/invalid; keep it obvious at top-level.
     with open("config.toml", "rb") as f:
         cfg = tomllib.load(f)
 
     output_dir = cfg["outputDir"]
     os.makedirs(output_dir, exist_ok=True)
 
-    log_path = os.path.join(output_dir, "log.txt")
+    # Use the provided logger_output_dir for logs; fall back to output_dir if empty/None.
+    if not logger_output_dir:
+        logger_output_dir = output_dir
+    os.makedirs(logger_output_dir, exist_ok=True)
+
+    log_path = os.path.join(logger_output_dir, "log.txt")
     logger = Logger(log_path)
+
     agg = LogAgg()
     return cfg, output_dir, logger, agg
+
 
 
 def optionally_load_geocode_credentials(_logger):
@@ -145,3 +150,5 @@ def create_map_html_with_assets(cfg, output_dir, logger):
     # CAREFUL: keep the call order identical to the old main() sequence.
     copy_map_assets_to_output_dir(output_dir, logger)
     write_map_html(cfg, output_dir, logger)
+    
+    
