@@ -10,6 +10,7 @@ From now now, your coding principles are:
   * Focus on maintainability, human readability, and continuity between versions. 
   * When refactoring, keep existing structures as much as possible; for easier comparison to before.
     * Side note: If radical refactoring has huge advantages, explain and ask, then I probably agree.
+    * My IDE handles Python refactoring well (e.g. moving libraries into subfolder), then just give list of steps to do.
   * main() is short, only contains the calls to the sequence of processing steps.
 * My preferences:
   * Especially for web access, use error handling try-except blocks with logging of the Exception name.
