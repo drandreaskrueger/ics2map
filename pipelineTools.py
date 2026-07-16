@@ -98,7 +98,7 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
 
     # Marked: external web access. Keep this try/except for better logs later.
     try:
-        map_rows, failed_rows = geocode_events(
+        map_rows, _ = geocode_events(
             events=events,
             allowed_country_codes=countries,
             rate_limit_seconds=rate_limit_seconds,
