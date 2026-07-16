@@ -45,8 +45,10 @@ Layout:
 New data (needs to be passed via python to .json too):
 
 * dateFrom AND dateTo 
+
 * description of event = from ICS pass through: `DESCRIPTION:` content
   * if there are URLs in it, make clickable
+  * show description only after expanding a triangle "description" button
 
 ### nice to have
 
@@ -56,7 +58,9 @@ Searchability:
 
 All points:
 
-* sidebar, sortable by date or name
+* sidebar with all events
+  * sortable by date or name
+  * clicking an event there, centers the map on that event map point
 
 Select points, then:
 
