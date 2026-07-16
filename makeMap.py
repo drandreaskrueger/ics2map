@@ -139,7 +139,7 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
 
 def write_map_html(cfg, output_dir, logger):
     """
-    Render map.html using mapTemplate.html and write it into the output directory.
+    Render map.html using templates/mapTemplate.html and write it into the output directory.
     """
     make_cfg = cfg["makeMap"]
     date_slider = make_cfg.get("dateSlider", "ON") == "ON"
@@ -158,12 +158,12 @@ if (applyBtn) {
 }
 """
 
-    # Marked: could fail if mapTemplate.html missing; log then re-raise.
+    # Marked: could fail if templates/mapTemplate.html missing; log then re-raise.
     try:
-        with open("mapTemplate.html", "r", encoding="utf-8") as f:
+        with open("templates/mapTemplate.html", "r", encoding="utf-8") as f:
             template = f.read()
     except Exception as e:
-        logger.error(f"Failed to read mapTemplate.html: {type(e).__name__}: {e}")
+        logger.error(f"Failed to read templates/mapTemplate.html: {type(e).__name__}: {e}")
         raise
 
     html = (
@@ -181,7 +181,7 @@ def copy_map_assets_to_output_dir(output_dir: str, logger):
     so outputs/map.html can reference them.
     """
     for asset_name in ["mapScripts.js", "mapStyles.css"]:
-        src_path = os.path.join(".", asset_name)
+        src_path = os.path.join(".", "templates", asset_name)
         dst_path = os.path.join(output_dir, asset_name)
         try:
             with open(src_path, "rb") as fsrc:
