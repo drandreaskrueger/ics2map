@@ -50,6 +50,8 @@ New data (needs to be passed via python to .json too):
   * if there are URLs in it, make clickable
   * show description only after expanding a triangle "description" button
 
+
+
 ### nice to have
 
 Searchability:
@@ -67,6 +69,8 @@ Select points, then:
 * select mode, finish, process
 * show 'distance as the crow flies' between 2 points
 * sum up distances of sequence of points
+
+Question: Why "Location: Berlin, Germany" versus "Geocoder: Berlin, Germany" always identical?
 
 ### More data passed through, then:
 
