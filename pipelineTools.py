@@ -1,5 +1,4 @@
 import os, csv, json
-from datetime import datetime
 import tomllib  # Python 3.11+
 
 from importICS import load_events_from_ics
@@ -7,8 +6,6 @@ from loggingTools import Logger, LogAgg
 
 from geocodeCache import GeocodeCache
 from geocode import geocode_events
-
-from htmlTools import build_controls_block
 
 from htmlTools import (
     write_map_html,
@@ -142,9 +139,9 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
 
     return map_rows
 
-# TODO:
-def create_map_html_with_assets():
-    """Create the HTML map output and copy required assets into the output directory."""
-    # CAREFUL: keep call order identical to previous main() logic.
-    write_map_html()
-    copy_map_assets_to_output_dir()
+
+def create_map_html_with_assets(cfg, output_dir, logger):
+    """Create HTML map output and copy required assets into the output directory."""
+    # CAREFUL: keep the call order identical to the old main() sequence.
+    copy_map_assets_to_output_dir(output_dir, logger)
+    write_map_html(cfg, output_dir, logger)

@@ -6,6 +6,7 @@ from pipelineTools import (
     load_selected_ics_events,
     run_geocoding_and_write_map_data,
     create_map_html_with_assets,
+    
 )
 
 from loggingTools import load_aggregates_snapshot
@@ -27,11 +28,7 @@ def main():
     events = load_selected_ics_events(cfg, agg, logger)
     _ = run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir)
     
-    copy_map_assets_to_output_dir(output_dir, logger)
-    write_map_html(cfg, output_dir, logger)
-    
-    # TODO: replace the above with:
-    # create_map_html_with_assets(...)
+    _ = create_map_html_with_assets(cfg, output_dir, logger)
     
 
     logger.info("Pipeline complete")
