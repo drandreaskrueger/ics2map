@@ -32,6 +32,10 @@ created at runtime:
       map.html
       mapData.csv
 
+to avoid CORS error during development, go to http://localhost:8000/outputs/map.html and serve:
+
+    python -m http.server 8000
+
 ## repo creation log
 ### venv in windows using python 3.14
 
