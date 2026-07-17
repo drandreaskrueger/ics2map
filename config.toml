@@ -21,6 +21,7 @@ geocoderLanguage = "en"
 useGeocodeCache = true
 
 # file paths (relative to outputDir, or absolute if you prefer)
+importFailedCsv = "importFailed.csv"
 geocodeCacheCsv = "geocodeCache.csv"
 geocodeFailedCsv = "geocodeFailed.csv"
 mapDataCsv = "mapData.csv"
