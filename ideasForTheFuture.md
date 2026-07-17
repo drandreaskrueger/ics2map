@@ -1,6 +1,7 @@
 # ideas for the future
 
 (A) Python development
+
 (B) Map functionality
 
 all divided into: 
@@ -15,7 +16,7 @@ all divided into:
 ---
 
 
-## Python development
+## (A) Python development
 ### essential
 
 Python code most urgent:
@@ -57,7 +58,7 @@ geocodeCredentials.toml could be left out completely, no API key needed
 
 ---
 
-## Map functionality
+## (B) Map functionality
 
 ### essential
 
