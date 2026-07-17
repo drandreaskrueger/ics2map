@@ -71,7 +71,7 @@ Functionality:
 
 Layout:
 
-* put date chooser in top right, currently overlaps with map +/- buttons
+* all done, thanks.
 
 New data (needs to be passed via python to .json too):
 
@@ -120,3 +120,4 @@ Done:
   
 * Done: Marker overlap (two events, same location) was resolved by Leaflet. Hooray.
 * Done: prepopulate date fields with largest date intervall. Was already done in existing code. Hooray.
+* Done: put date chooser in top right, currently overlaps with map +/- buttons
