@@ -70,9 +70,13 @@ class GeocodeCache:
         os.makedirs(os.path.dirname(self.cache_csv_path) or ".", exist_ok=True)
         with open(self.cache_csv_path, "w", encoding="utf-8", newline="") as f:
             fieldnames = ["location_text", "lat", "lon", "display_name", "country_code"]
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer = csv.DictWriter(
+                f,
+                fieldnames=fieldnames,
+                quotechar='"',
+                quoting=csv.QUOTE_ALL,
+            )
             writer.writeheader()
-
             for k, v in self._db.items():
                 writer.writerow({
                     "location_text": k,

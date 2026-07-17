@@ -49,7 +49,12 @@ def geocode_events(
     file_exists = os.path.exists(failed_csv_path)
     if not file_exists:
         with open(failed_csv_path, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=["location_text", "event_date", "event_summary", "error"])
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["location_text", "event_date", "event_summary", "error"],
+                quotechar='"',
+                quoting=csv.QUOTE_ALL,
+            )
             writer.writeheader()
 
     geolocator = Nominatim(user_agent="ics-location-to-map")
@@ -169,8 +174,14 @@ def geocode_events(
 
     # Append failures to CSV
     with open(failed_csv_path, "a", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["location_text", "event_date", "event_summary", "error"])
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["location_text", "event_date", "event_summary", "error"],
+            quotechar='"',
+            quoting=csv.QUOTE_ALL,
+        )
         for row in failed_rows:
             writer.writerow(row)
+
 
     return map_rows, failed_rows

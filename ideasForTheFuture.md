@@ -6,7 +6,6 @@
 Python code most urgent:
 
 * do not skip silently, e.g. third event in test-ICS has no LOCATION: entry
-* all text fields in CSV in "..." quotes please, to avoid comma-related issues 
 
 ### nice to have
 To execute each python file standalone, add a `if __name__ == "__main__":`

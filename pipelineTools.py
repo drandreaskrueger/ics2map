@@ -128,10 +128,16 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
             "display_name",
             "country_code",
         ]
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(
+            f,
+            fieldnames=fieldnames,
+            quotechar='"',
+            quoting=csv.QUOTE_ALL,
+        )
         writer.writeheader()
         for r in map_rows:
             writer.writerow(r)
+
 
     logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_csv_path}")
     
