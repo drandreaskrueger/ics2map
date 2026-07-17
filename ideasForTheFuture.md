@@ -41,7 +41,7 @@ geocodeCredentials.toml could be left out completely, no API key needed
 Functionality:
 
 * Done: Marker overlap (two events, same location) was resolved by Leaflet, hooray.
-* prepopulate date fields with largest date intervall
+* Done: prepopulate date fields with largest date intervall. Was already done in existing code. Hooray.
 
 Layout:
 
