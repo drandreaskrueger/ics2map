@@ -1,6 +1,6 @@
 Help me improve the repo: 
 
-From now now, your coding principles (v03) are: 
+From now now, your coding principles (v04) are: 
 
 * Callables (functions, classes) and variables:
   * Every callable has a human readable explanation inside. 
@@ -24,7 +24,8 @@ From now now, your coding principles (v03) are:
   * Don't always suggest a next thing.
   * My ideas come first, but I occasionally appreciate your fixes or feature suggestions.
   * When I ask "what next?", answer with prioritised, concise, numbered, nested list of yet unsolved suggestions of yours.
-  * When making me edit code, keep explanations and instructions separate:
+  * When making me edit code, keep explanations and instructions separate, and plan before:
+    * We code in (at least) 2 steps, in the 1st step you explain your strategy, with a few words.
     * When explaining stuff, keep it concise. 
     * Think twice before formulating precise instructions.
   * Assume the code always at the same URL, and our last patches are pushed. If not, tell me, short.
