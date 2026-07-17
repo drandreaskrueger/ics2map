@@ -1,5 +1,20 @@
 # ideas for the future
 
+(A) Python development
+(B) Map functionality
+
+all divided into: 
+
+* essential
+* nice to have
+* really not essential but worth mentioning
+* possible trouble noticed by AI
+* done
+
+
+---
+
+
 ## Python development
 ### essential
 
@@ -34,7 +49,15 @@ geocodeCredentials.toml could be left out completely, no API key needed
 
 * `importICS.py` #CAREFUL: right now total\_\in\_source = len(list(cal.events)) iterates events once; if you notice weird behavior, switch to just using len(cal.events) (depending on the ics library object type).
 
-## map functionality
+
+### Done, hooray
+
+* Done: do not skip silently, e.g. third event in test-ICS has no LOCATION: entry
+* Done: all text fields in CSV in "..." quotes please, to avoid comma-related issues
+
+---
+
+## Map functionality
 
 ### essential
 
@@ -44,11 +67,6 @@ Functionality:
   * With a shorter range, e.g. dateFrom,dateTo same day, and press "Apply" no redraw happens. Button not connected?
   * The status sentence ("Showing 4 event(s)") should become ("Showing 2 of 4 event(s)")
   * New button "Show All" takes the largest occuring date intervall, and populates the date fields, and presses "Apply"
-
-Done:
-  
-* Done: Marker overlap (two events, same location) was resolved by Leaflet. Hooray.
-* Done: prepopulate date fields with largest date intervall. Was already done in existing code. Hooray.
 
 Layout:
 
@@ -95,3 +113,9 @@ Add UI controls: dropdown: “All / Country DE / AT / …"
 
 Export GeoJSON (so can be used elsewhere): `outputs/map.geojson`
 
+### Done, hooray
+
+Done:
+  
+* Done: Marker overlap (two events, same location) was resolved by Leaflet. Hooray.
+* Done: prepopulate date fields with largest date intervall. Was already done in existing code. Hooray.
