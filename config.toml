@@ -13,6 +13,9 @@ countries = ["DE","AT","CZ","HU","PL","NL","SI","RO","CH","HR","GR"]
 # if you want to require LOCATION not empty
 requireLocation = true
 
+# do not skip silently where import fails
+importFailedCsv = "importFailed.csv"
+
 [geoCode]
 rateLimitSeconds = 1.1
 geocoderLanguage = "en"
@@ -21,7 +24,6 @@ geocoderLanguage = "en"
 useGeocodeCache = true
 
 # file paths (relative to outputDir, or absolute if you prefer)
-importFailedCsv = "importFailed.csv"
 geocodeCacheCsv = "geocodeCache.csv"
 geocodeFailedCsv = "geocodeFailed.csv"
 mapDataCsv = "mapData.csv"

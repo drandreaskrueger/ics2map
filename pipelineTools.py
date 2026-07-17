@@ -56,6 +56,8 @@ def load_selected_ics_events(cfg, output_dir, agg, logger):
     Load ICS events filtered by configured date range and location constraints.
     Returns selected events list.
     """
+    import_failed_csv_path = os.path.join(output_dir, cfg["importICS"]["importFailedCsv"])
+    
     ics_path = cfg["icsPath"]
     date_from = cfg["importICS"]["dateFrom"]
     date_to = cfg["importICS"]["dateTo"]
