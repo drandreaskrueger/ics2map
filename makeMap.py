@@ -25,7 +25,7 @@ def main():
 
     optionally_load_geocode_credentials(logger)
 
-    events = load_selected_ics_events(cfg, agg, logger)
+    events = load_selected_ics_events(cfg, output_dir, agg, logger)
     
     _ = run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir)
     

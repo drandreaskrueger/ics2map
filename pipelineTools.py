@@ -51,7 +51,7 @@ def optionally_load_geocode_credentials(_logger):
         _ = tomllib.load(f)
 
 
-def load_selected_ics_events(cfg, agg, logger):
+def load_selected_ics_events(cfg, output_dir, agg, logger):
     """
     Load ICS events filtered by configured date range and location constraints.
     Returns selected events list.
@@ -60,20 +60,32 @@ def load_selected_ics_events(cfg, agg, logger):
     date_from = cfg["importICS"]["dateFrom"]
     date_to = cfg["importICS"]["dateTo"]
     require_location = cfg["importICS"].get("requireLocation", True)
+    import_failed_csv_path = os.path.join(
+        cfg["outputDir"] if "outputDir" in cfg else cfg.get("outputDir", "outputs"),
+        cfg["importICS"]["importFailedCsv"]
+    )
 
-    agg.totalImportedEvents = 0
+    # If your repo uses outputDir only in makeMap.py, we can compute it there instead.
+    # CAREFUL: This assumes cfg["outputDir"] exists; if it doesn't, see next note below.
+    agg.totalSelectedEvents = 0
+    agg.totalImportFailed = 0
+
     events = load_events_from_ics(
         ics_path=ics_path,
         date_from=date_from,
         date_to=date_to,
         require_location=require_location,
+        failed_csv_path=import_failed_csv_path,
+        logger=logger,
+        agg=agg,
     )
-    agg.totalSelectedEvents = len(events)
 
+    agg.totalSelectedEvents = len(events)
     logger.info(
         f"Imported events selected by date range: {len(events)} from '{ics_path}'"
     )
     return events
+
 
 
 def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):

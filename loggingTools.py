@@ -9,6 +9,10 @@ class LogAgg:
     """
     totalImportedEvents: int = 0
     totalSelectedEvents: int = 0
+
+    # NEW: import-stage failures (ICS parsing / missing required fields)
+    totalImportFailed: int = 0
+
     totalGeocodeSucceeded: int = 0
     totalGeocodeFailed: int = 0
     totalGeocodeMissingLocation: int = 0
@@ -64,6 +68,7 @@ def load_aggregates_snapshot(agg: LogAgg) -> str:
     return (
         f"Imported: {agg.totalImportedEvents}, "
         f"Selected: {agg.totalSelectedEvents}, "
+        f"Import FAIL: {agg.totalImportFailed}, "
         f"Geocode OK: {agg.totalGeocodeSucceeded}, "
         f"Geocode FAIL: {agg.totalGeocodeFailed}, "
         f"Missing location: {agg.totalGeocodeMissingLocation}"

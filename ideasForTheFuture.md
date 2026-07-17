@@ -5,7 +5,7 @@
 
 Python code most urgent:
 
-* do not skip silently, e.g. third event in test-ICS has no LOCATION: entry
+* all done, thanks!
 
 ### nice to have
 To execute each python file standalone, add a `if __name__ == "__main__":`
@@ -29,6 +29,10 @@ Add CLI entrypoint, use argparse so users can override config without editing fi
 `load_config_and_init_logging("outputs")` should not be called with "outputs" but read from TOML
 
 geocodeCredentials.toml could be left out completely, no API key needed
+
+### possible trouble noticed by AI
+
+* `importICS.py` #CAREFUL: right now total\_\in\_source = len(list(cal.events)) iterates events once; if you notice weird behavior, switch to just using len(cal.events) (depending on the ics library object type).
 
 ## map functionality
 
