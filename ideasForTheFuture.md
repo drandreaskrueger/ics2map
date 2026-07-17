@@ -27,6 +27,8 @@ Add CLI entrypoint, use argparse so users can override config without editing fi
 * --skip-geocode (debug fast)
 * --output-dir outputs
 
+`load_config_and_init_logging("outputs")` should not be called with "outputs" but read from TOML
+
 geocodeCredentials.toml could be left out completely, no API key needed
 
 ## map functionality

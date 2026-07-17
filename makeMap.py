@@ -21,7 +21,7 @@ def main():
     4) create map.html + copy assets (via create_map_html_with_assets)
     5) log “Pipeline complete”, then print aggregates snapshot + output dir
     """
-    cfg, output_dir, logger, agg = load_config_and_init_logging("output")
+    cfg, output_dir, logger, agg = load_config_and_init_logging("outputs")
 
     optionally_load_geocode_credentials(logger)
 
