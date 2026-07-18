@@ -1,7 +1,51 @@
 import os
 import tomllib  # Python 3.11+
+import re
+from html import escape
 
 from loggingTools import Logger
+
+
+# Allow URL characters broadly; the important part is that we match across folded whitespace.
+_URL_CHAR = r"A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%"
+
+# Match protocol + (whitespace*URL_CHAR)+ so folded whitespace inside URLs is tolerated.
+# Then we reconstruct the real URL by removing whitespace.
+_BROKEN_URL_RE = re.compile(rf"(https?://(?:\s*[{_URL_CHAR}])+)")
+
+_TRAILING_PUNCT = ".,;:!?)]}»›\"'"
+
+def link_urls_in_text_for_html(text: str) -> str:
+    """
+    Convert URLs in plain (possibly ICS-line-folded) DESCRIPTION text into clickable links.
+    Safe for HTML injection because we escape non-URL text and link href/text.
+    """
+    if not text:
+        return ""
+
+    out = []
+    last = 0
+
+    for m in _BROKEN_URL_RE.finditer(text):
+        start, end = m.span(1)
+        raw = m.group(1)
+
+        # Trim typical trailing punctuation outside the URL.
+        while raw and raw[-1] in _TRAILING_PUNCT:
+            raw = raw[:-1]
+
+        # Reconstruct folded URL by removing whitespace.
+        url = re.sub(r"\s+", "", raw)
+
+        out.append(escape(text[last:start]))
+        out.append(
+            f'<a href="{escape(url)}" target="_blank" rel="noopener noreferrer">{escape(url)}</a>'
+        )
+        last = end
+
+    out.append(escape(text[last:]))
+    return "".join(out)
+
 
 def build_controls_block(enabled: bool) -> str:
     """
@@ -149,3 +193,5 @@ if __name__ == "__main__":
     block = build_controls_block(date_slider)
     logger.info(f"Debug htmlTools: built controls block. enabled={date_slider}, len={len(block)}")
     print(block)
+
+    
