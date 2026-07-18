@@ -98,12 +98,50 @@ function renderFiltered(fromStr, toStr) {
   console.log("renderFiltered: done");
 }
 
+
+/* debugging only, see duck.ai 2026/07/18 */ 
+
+function debugSampleDates(points, limit = 20) {
+  // Human-readable logging to quickly detect date formats in mapData.json
+  const samples = (points || [])
+    .map(p => p && p.date)
+    .filter(v => v !== null && v !== undefined)
+    .slice(0, limit);
+
+  console.log("DEBUG: date samples (raw):", samples);
+
+  const unique = Array.from(new Set(samples.map(v => String(v))));
+  console.log("DEBUG: unique raw date strings (first 30):", unique.slice(0, 30));
+
+  if (samples.length > 0) {
+    const s = String(samples[0]);
+    console.log("DEBUG: first sample length:", s.length);
+    console.log("DEBUG: first sample prefix(0..10):", s.slice(0, 10));
+  }
+
+  // Also helpful: show whether values look like YYYY-MM-DD or full ISO datetime
+  const counts = { "YYYY-MM-DD": 0, "ISO-like": 0, "other": 0 };
+  for (const v of unique) {
+    const t = v.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(t)) counts["YYYY-MM-DD"]++;
+    else if (/^\d{4}-\d{2}-\d{2}T/.test(t) || /^\d{4}-\d{2}-\d{2} /.test(t)) counts["ISO-like"]++;
+    else counts["other"]++;
+  }
+  console.log("DEBUG: date format counts:", counts);
+}
+
+/* debugging end, see duck.ai 2026/07/18 */ 
+
+
+
 async function loadMapData() {
   /* load mapData.json converted to JS objects */
   console.log("loadMapData: start");
 
   const resp = await fetch('mapData.json');
   const data = await resp.json();
+
+   debugSampleDates(data, 30); // <-- debug only, see duck.ai 2026/07/18
 
   allPoints = (data || []).map(p => ({
     summary: p.summary,

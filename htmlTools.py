@@ -41,6 +41,9 @@ if (applyBtn) {
   applyBtn.addEventListener('click', () => {
     const fromVal = document.getElementById('fromDate').value;
     const toVal = document.getElementById('toDate').value;
+    
+    console.log("DEBUG: Apply pressed", { fromVal, toVal });  // DEBUG only
+    
     renderFiltered(fromVal, toVal);
   });
 }
