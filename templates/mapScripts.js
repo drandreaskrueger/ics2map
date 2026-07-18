@@ -25,6 +25,8 @@ function dateInRange(dateStr, fromStr, toStr) {
   return true;
 }
 
+
+
 function renderFiltered(fromStr, toStr) {
   console.log("renderFiltered: start", { fromStr, toStr });
 
@@ -33,11 +35,14 @@ function renderFiltered(fromStr, toStr) {
     clusterGroup = null;
   }
 
+  const total = allPoints.length; // Y
   const filtered = allPoints.filter(p => dateInRange(p.date, fromStr || "", toStr || ""));
   console.log("renderFiltered: filtered count", filtered.length);
 
   document.getElementById('status').textContent =
-    filtered.length ? `Showing ${filtered.length} event(s)` : 'No events in range';
+    filtered.length
+      ? `Showing ${filtered.length} of ${total} event(s)`
+      : `No events in range (${fromStr || '…'} → ${toStr || '…'})`;
 
   console.log("renderFiltered: status set");
 

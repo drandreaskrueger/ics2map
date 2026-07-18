@@ -12,17 +12,29 @@ def build_controls_block(enabled: bool) -> str:
         return '<div id="status" style="display:none"></div>'
 
     return """
-<div id="controls">
-<div>
-<label>From</label><input id="fromDate" type="date" />
-</div>
-<div style="margin-top:6px;">
-<label>To</label><input id="toDate" type="date" />
-</div>
-<button id="applyBtn" type="button">Apply</button>
-<div id="status" style="margin-top:6px; color:#444;"></div>
-</div>
-"""
+    <div id="controls">
+      <div class="controls-row">
+        <div class="dates-col">
+          <div>
+            <label>From</label><input id="fromDate" type="date" />
+          </div>
+          <div style="margin-top:6px;">
+            <label>To</label><input id="toDate" type="date" />
+          </div>
+        </div>
+    
+        <div class="showall-col">
+          <button id="showAllBtn" type="button">Show All</button>
+        </div>
+      </div>
+    
+      <div class="actions-row">
+        <button id="applyBtn" type="button">Apply</button>
+        <div id="status"></div>
+      </div>
+    </div>
+    """
+
 
 
 def write_map_html(cfg, output_dir, logger):
