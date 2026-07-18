@@ -81,7 +81,7 @@ if (showAllBtn) {
     );
     // end DEBUG only
 
-    const { bestStart, bestEnd } = findLargestContiguousDateRun(uniqueDates);
+    const [ bestStart, bestEnd ] = findLargestContiguousDateRun(uniqueDates);
 
     console.log("DEBUG: Show All pressed", { bestStart, bestEnd });
 

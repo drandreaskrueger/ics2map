@@ -64,10 +64,7 @@ geocodeCredentials.toml could be left out completely, no API key needed
 
 Functionality:
 
-* Date range chooser does not work (perfectly) yet:
-  * With a shorter range, e.g. dateFrom,dateTo same day, and press "Apply" no redraw happens. Button not connected?
-  * The status sentence ("Showing 4 event(s)") should become ("Showing 2 of 4 event(s)")
-  * New button "Show All" takes the largest occuring date intervall, and populates the date fields, and presses "Apply"
+* all done, thanks.
 
 Layout:
 
@@ -121,3 +118,8 @@ Done:
 * Done: Marker overlap (two events, same location) was resolved by Leaflet. Hooray.
 * Done: prepopulate date fields with largest date intervall. Was already done in existing code. Hooray.
 * Done: put date chooser in top right, currently overlaps with map +/- buttons
+
+* Date range chooser does not work (perfectly) yet:
+  * With a shorter range, e.g. dateFrom,dateTo same day, and press "Apply" no redraw happens. Button not connected?
+  * The status sentence ("Showing 4 event(s)") should become ("Showing 2 of 4 event(s)")
+  * New button "Show All" takes the largest occuring date intervall, and populates the date fields, and presses "Apply"

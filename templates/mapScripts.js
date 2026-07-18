@@ -48,45 +48,27 @@ function ymdFromLocalDate(d) {
 }
 
 function findLargestContiguousDateRun(uniqueSortedDates) {
-  const set = new Set(uniqueSortedDates);
-
-  let bestStart = "";
-  let bestEnd = "";
-  let bestLen = -1;
-
-  for (const start of uniqueSortedDates) {
-    const startDate = parseYMDToLocalDate(start);
-    if (!startDate) continue;
-
-    // Only start runs that have no predecessor in the set
-    const prev = new Date(startDate.getTime());
-    prev.setDate(prev.getDate() - 1);
-    const prevYmd = ymdFromLocalDate(prev);
-    if (set.has(prevYmd)) continue;
-
-    // Walk forward and count days explicitly (DST-safe)
-    let endDate = new Date(startDate.getTime());
-    let len = 1; // inclusive count
-    while (true) {
-      const next = new Date(endDate.getTime());
-      next.setDate(next.getDate() + 1);
-      const nextYmd = ymdFromLocalDate(next);
-      if (!set.has(nextYmd)) break;
-      endDate = next;
-      len++;
-    }
-
-    if (len > bestLen) {
-      bestLen = len;
-      bestStart = start;
-      bestEnd = ymdFromLocalDate(endDate);
-    }
+  /**
+   * Returns the overall observed date span (min/max) as [bestStart, bestEnd].
+   * Works even if the caller passes unsorted input.
+   *
+   * @param {string[]} uniqueSortedDates - ISO dates 'YYYY-MM-DD' (ideally unique; sorting makes it safe).
+   * @returns {[string, string]} - [bestStart, bestEnd]
+   *
+   * call it like this:
+   * const [ bestStart, bestEnd ] = findLargestContiguousDateRun(uniqueDates);
+   */
+  // #CAREFUL: avoid index errors on empty/null input.
+  if (!uniqueSortedDates || uniqueSortedDates.length === 0) {
+    return [null, null];
   }
 
-  return { bestStart, bestEnd };
+  const sortedDates = [...uniqueSortedDates].sort(); // 'YYYY-MM-DD' => lexicographic == chronological
+  const bestStart = sortedDates[0];
+  const bestEnd = sortedDates[sortedDates.length - 1];
+
+  return [bestStart, bestEnd];
 }
-
-
 // END helpers for "show all" button 
 
 function renderFiltered(fromStr, toStr) {
