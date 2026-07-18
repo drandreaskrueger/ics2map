@@ -59,6 +59,41 @@ if (applyBtn) {
     renderFiltered(fromVal, toVal);
   });
 }
+
+const showAllBtn = document.getElementById("showAllBtn");
+if (showAllBtn) {
+  showAllBtn.addEventListener("click", () => {
+    const uniqueDates = Array.from(new Set((allPoints || []).map(p => p.date).filter(Boolean))).sort();
+
+    if (!uniqueDates.length) {
+      console.log("Show All: no dates available");
+      return;
+    }
+    
+    // begin DEBUG only
+    console.log("DEBUG ShowAll: all uniqueDates (sorted)", uniqueDates);
+    const prevFirst = uniqueDates[0];
+    const next = new Date(parseYMDToLocalDate(prevFirst).getTime());
+    next.setDate(next.getDate() + 1);
+    console.log("DEBUG ShowAll: first date + 1 day expected", ymdFromLocalDate(next));
+    console.log("DEBUG ShowAll: does set contain expected next?",
+      new Set(uniqueDates).has(ymdFromLocalDate(next))
+    );
+    // end DEBUG only
+
+    const { bestStart, bestEnd } = findLargestContiguousDateRun(uniqueDates);
+
+    console.log("DEBUG: Show All pressed", { bestStart, bestEnd });
+
+    const fromEl = document.getElementById("fromDate");
+    const toEl = document.getElementById("toDate");
+    if (fromEl) fromEl.value = bestStart;
+    if (toEl) toEl.value = bestEnd;
+
+    // "and presses Apply"
+    renderFiltered(bestStart, bestEnd);
+  });
+}
 """
 
     # Marked: could fail if templates/mapTemplate.html missing; log then re-raise.

@@ -26,6 +26,68 @@ function dateInRange(dateStr, fromStr, toStr) {
 }
 
 
+// BEGIN helpers for "show all" button 
+
+function parseYMDToLocalDate(ymdStr) {
+  const s = String(ymdStr || "").trim();
+  // expecting YYYY-MM-DD
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return null;
+
+  const y = Number(m[1]);
+  const mo = Number(m[2]) - 1;
+  const d = Number(m[3]);
+  return new Date(y, mo, d, 0, 0, 0, 0);
+}
+
+function ymdFromLocalDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function findLargestContiguousDateRun(uniqueSortedDates) {
+  const set = new Set(uniqueSortedDates);
+
+  let bestStart = "";
+  let bestEnd = "";
+  let bestLen = -1;
+
+  for (const start of uniqueSortedDates) {
+    const startDate = parseYMDToLocalDate(start);
+    if (!startDate) continue;
+
+    // Only start runs that have no predecessor in the set
+    const prev = new Date(startDate.getTime());
+    prev.setDate(prev.getDate() - 1);
+    const prevYmd = ymdFromLocalDate(prev);
+    if (set.has(prevYmd)) continue;
+
+    // Walk forward and count days explicitly (DST-safe)
+    let endDate = new Date(startDate.getTime());
+    let len = 1; // inclusive count
+    while (true) {
+      const next = new Date(endDate.getTime());
+      next.setDate(next.getDate() + 1);
+      const nextYmd = ymdFromLocalDate(next);
+      if (!set.has(nextYmd)) break;
+      endDate = next;
+      len++;
+    }
+
+    if (len > bestLen) {
+      bestLen = len;
+      bestStart = start;
+      bestEnd = ymdFromLocalDate(endDate);
+    }
+  }
+
+  return { bestStart, bestEnd };
+}
+
+
+// END helpers for "show all" button 
 
 function renderFiltered(fromStr, toStr) {
   console.log("renderFiltered: start", { fromStr, toStr });
