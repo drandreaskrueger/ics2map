@@ -141,7 +141,7 @@ async function loadMapData() {
   const resp = await fetch('mapData.json');
   const data = await resp.json();
 
-   debugSampleDates(data, 30); // <-- debug only, see duck.ai 2026/07/18
+  // debugSampleDates(data, 30); // <-- debug only, see duck.ai 2026/07/18
 
   allPoints = (data || []).map(p => ({
     summary: p.summary,
