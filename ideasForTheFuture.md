@@ -78,7 +78,7 @@ Layout:
 
 New data (needs to be passed via python to .json too):
 
-* dateFrom AND dateTo = finishing that today, then postpone all else to later.
+* dateFrom AND dateTo = two attempts failed today, so also postpone to later.
 
 * description of event = from ICS pass through: `DESCRIPTION:` content
   * if there are URLs in it, make clickable
