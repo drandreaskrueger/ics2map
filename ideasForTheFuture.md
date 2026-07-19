@@ -6,6 +6,8 @@
 
 (C) What AI suggested
 
+(D) Ideas what to ask the AI
+
 Chapters possibly divided into: 
 
 * essential
