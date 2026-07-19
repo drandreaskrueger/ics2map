@@ -35,7 +35,7 @@ hide via .gitignore:
      - after lookup, filter/flag results that appear outside your allowed country set
      - reduces ambiguity and improves match quality for your event locations
      
-3. `duck.ai_2026-07-14_22-46-34_patch-errors-and-make-it-work_HOORAY.md`
+3. [duck.ai_2026-07-14_22-46-34_patch-errors-and-make-it-work_HOORAY.md](duck.ai_2026-07-14_22-46-34_patch-errors-and-make-it-work_HOORAY.md)
     - This session focuses on getting the refactor changes to actually work end-to-end, while improving maintainability:
     
     - **Refactor direction:** split responsibilities that were mixed inside `makeMap.py` (HTML template, UI controls HTML block, orchestration) into smaller, reusable pieces.
