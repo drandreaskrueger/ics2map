@@ -1,4 +1,8 @@
 # AI conversations 
+
+Over time, these [coding-principles.md](coding-principles.md) became better an better.
+(See ideasForTheFuture.md --> "(D) Ideas what to ask the AI" for future streamlining)
+
 ## radical refactor before copy-paste
 
     touch config.toml
