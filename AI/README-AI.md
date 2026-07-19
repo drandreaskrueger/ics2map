@@ -108,4 +108,6 @@ hide via .gitignore:
      - DESCRIPTION UX improvement plan:
        - support a more readable description UI (e.g., collapsible/expandable), while keeping injection safe by escaping/linkifying appropriately.
 
-8. = today (placeholder only)
+8. Coding Sessions 8a and 8b:
+   - 8.1 = 8a = [duck.ai_2026-07-19_18-09-07_in-README-AI-give-overview_plus-failed-attempt-1.md](duck.ai_2026-07-19_18-09-07_in-README-AI-give-overview_plus-failed-attempt-1.md)
+   - 8.2 = 8b = [duck.ai_2026-07-19_18-09-43_DTEND-passthrough-failed-attempt-2.md](duck.ai_2026-07-19_18-09-43_DTEND-passthrough-failed-attempt-2.md)
