@@ -18,27 +18,6 @@ hide via .gitignore:
 1. initial thoughts & first code: duck.ai_2026-07-14_17-21-01.md (omitted because contained below)
 2. radical refactor prompt: [duck.ai\_2026-07-14\_18-11-00\_prompt-refactor.txt](duck.ai_2026-07-14_18-11-00_prompt-refactor.txt)
 3. refactored code (plus all before): [duck.ai\_2026-07-14\_18-16-26\_refactored-code.md](duck.ai_2026-07-14_18-16-26_refactored-code.md)
-
-2. radical refactor prompt: `duck.ai_2026-07-14_18-11-00_prompt-refactor.txt`
-   - Goal: split the solution into maintainable modules and introduce consistent logging + “fail/review” outputs.
-   - Intended config-driven structure (examples from the prompt):
-     - `config.toml`
-       - `importICS`: `dateFrom`, `dateTo`, `countries=...`
-       - `geoCode`: `geocodeCache.csv`, `rateLimitSeconds=...`, etc.
-       - `makeMap`: `style.css`, `dateslider=ON`, `dateformat=YYYY-MM-DD`, etc.
-     - `geocodeCredentials.toml`
-       - separated so it can be hidden via `.gitignore`
-     - Output expectations:
-       - `log.txt`
-       - `geocodeCache.csv`
-       - `geocodeFailed.csv`
-       - `map.html`, `mapData.csv`
-   - Coding principles captured in the prompt:
-     - human-readable explanation inside every callable
-     - short but meaningful variable names
-     - avoid dropping missing/failed objects silently (log + dedicated CSV)
-     - web access uses `try/except` and logs the exception name
-3. refactored code (plus all before): [duck.ai\_2026-07-14\_18-16-26\_refactored-code.md](duck.ai_2026-07-14_18-16-26_refactored-code.md)
    - Contains a “handmade” pipeline for your concrete use-case:
      - parse `.ics`
      - extract event `LOCATION` text (human place names, not pre-existing coordinates)
@@ -55,4 +34,3 @@ hide via .gitignore:
    - Country biasing strategy for your mostly-Europe dataset:
      - after lookup, filter/flag results that appear outside your allowed country set
      - reduces ambiguity and improves match quality for your event locations
-
