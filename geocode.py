@@ -38,12 +38,10 @@ def geocode_events(
     - reuse cached successful results
     - write per-event failures to geocodeFailed.csv (human readable)
     - return map rows (per event, not per location)
-      and a list of review failures if you want later extensions.
 
-    Output row schema used by makeMap:
-      summary, uid, date, location_text, lat, lon, display_name, country_code
+    Output row schema used by makeMap/pipelineTools:
+    summary, uid, date, date_end, location_text, lat, lon, display_name, country_code
     """
-
     # Ensure failed csv exists and has header
     os.makedirs(os.path.dirname(failed_csv_path) or ".", exist_ok=True)
     file_exists = os.path.exists(failed_csv_path)
@@ -51,19 +49,18 @@ def geocode_events(
         with open(failed_csv_path, "w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(
                 f,
-                fieldnames=["location_text", "event_date", "event_summary", "error"],
+                fieldnames=["location_text", "event_date", "event_end", "event_summary", "error"],
                 quotechar='"',
                 quoting=csv.QUOTE_ALL,
             )
             writer.writeheader()
 
     geolocator = Nominatim(user_agent="ics-location-to-map")
-    # NOTE: we keep user-agent here simple; you can override from geocodeCredentialsFile.toml
-    # in a follow-up step. (This is a potential improvement area.)
 
+    # NOTE: user-agent can be overridden in a follow-up step.
     allowed_set = set([c.upper() for c in allowed_country_codes])
 
-    # Per LOCATION cache:
+    # Per LOCATION cache
     loc_to_success: Dict[str, GeocodeResult] = {}
     loc_to_error: Dict[str, str] = {}
 
@@ -99,16 +96,13 @@ def geocode_events(
             raw = (r.raw or {})
             cc = _safe_get_country_code(raw)
 
-            # Country filtering: if we can't determine cc or it doesn't match, mark as failure for review
-            # (You can relax this later if needed.)
+            # Country filtering
             if allowed_set and cc and cc not in allowed_set:
                 loc_to_error[loc_text] = f"outside_allowed_countries (cc={cc})"
                 agg.totalGeocodeFailed += 1
                 logger.warn(f"Geocode FAIL location='{loc_text}' reason=outside_allowed_countries cc={cc}")
                 continue
 
-            # Accept even if cc is empty (ambiguous) — map will still be generated,
-            # but you might prefer strictness. Keeping it workable for now.
             result = GeocodeResult(
                 lat=float(r.latitude),
                 lon=float(r.longitude),
@@ -121,7 +115,9 @@ def geocode_events(
                 geocode_cache.set(loc_text, result)
 
             agg.totalGeocodeSucceeded += 1
-            logger.info(f"Geocode OK location='{loc_text}' -> ({result.lat},{result.lon}) cc={result.country_code}")
+            logger.info(
+                f"Geocode OK location='{loc_text}' -> ({result.lat},{result.lon}) cc={result.country_code}"
+            )
 
         except Exception as ex:
             # IMPORTANT: record exception name for debugging.
@@ -134,27 +130,29 @@ def geocode_events(
     map_rows: List[dict] = []
     failed_rows: List[dict] = []
 
-    # Per-event logic (ties errors back to specific events for file outputs)
     for ev in events:
         if not ev.location_text:
             agg.totalGeocodeMissingLocation += 1
-            # One line per event with missing location
             logger.warn(f"Missing LOCATION in event uid={ev.uid} date={ev.date}")
+
             failed_rows.append({
                 "location_text": "",
                 "event_date": ev.date,
+                "event_end": ev.date_end,
                 "event_summary": ev.summary,
                 "error": "missing_location_text"
             })
             continue
 
         loc = ev.location_text
+
         if loc in loc_to_success:
             s = loc_to_success[loc]
             map_rows.append({
                 "summary": ev.summary,
                 "uid": ev.uid or "",
                 "date": ev.date,
+                "date_end": ev.date_end,
                 "location_text": ev.location_text,
                 "lat": s.lat,
                 "lon": s.lon,
@@ -168,6 +166,7 @@ def geocode_events(
         failed_rows.append({
             "location_text": loc,
             "event_date": ev.date,
+            "event_end": ev.date_end,
             "event_summary": ev.summary,
             "error": err
         })
@@ -176,12 +175,11 @@ def geocode_events(
     with open(failed_csv_path, "a", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["location_text", "event_date", "event_summary", "error"],
+            fieldnames=["location_text", "event_date", "event_end", "event_summary", "error"],
             quotechar='"',
             quoting=csv.QUOTE_ALL,
         )
         for row in failed_rows:
             writer.writerow(row)
-
 
     return map_rows, failed_rows

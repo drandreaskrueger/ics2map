@@ -25,7 +25,7 @@ Chapters possibly divided into:
 
 Python code most urgent:
 
-* all done, thanks!
+* the geocodeCache.csv is written but then in a later run never used?
 
 ### nice to have
 To execute each python file standalone, add a `if __name__ == "__main__":`
@@ -77,8 +77,6 @@ Layout:
 * all done, thanks.
 
 New data (needs to be passed via python to .json too):
-
-* dateFrom AND dateTo = two attempts failed today, so also postpone to later.
 
 * description of event = from ICS pass through: `DESCRIPTION:` content
   * if there are URLs in it, make clickable
@@ -151,5 +149,5 @@ Done:
   * what invisible assumption do you spot, that I could write explicitly?
   * where are inner inconsistencies or contradictions?
 
-
+* dateFrom AND dateTo = attempt 1 had already succeeded, but browser cache had hidden that.
 

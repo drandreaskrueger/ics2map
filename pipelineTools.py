@@ -1,12 +1,12 @@
-import os, csv, json
+import os
+import csv
+import json
 import tomllib  # Python 3.11+
 
 from importICS import load_events_from_ics
 from loggingTools import Logger, LogAgg
-
 from geocodeCache import GeocodeCache
 from geocode import geocode_events
-
 from htmlTools import (
     write_map_html,
     copy_map_assets_to_output_dir,
@@ -28,14 +28,12 @@ def load_config_and_init_logging(logger_output_dir: str):
     # Use the provided logger_output_dir for logs; fall back to output_dir if empty/None.
     if not logger_output_dir:
         logger_output_dir = output_dir
-    os.makedirs(logger_output_dir, exist_ok=True)
 
+    os.makedirs(logger_output_dir, exist_ok=True)
     log_path = os.path.join(logger_output_dir, "log.txt")
     logger = Logger(log_path)
-
     agg = LogAgg()
     return cfg, output_dir, logger, agg
-
 
 
 def optionally_load_geocode_credentials(_logger):
@@ -56,19 +54,16 @@ def load_selected_ics_events(cfg, output_dir, agg, logger):
     Load ICS events filtered by configured date range and location constraints.
     Returns selected events list.
     """
-    import_failed_csv_path = os.path.join(output_dir, cfg["importICS"]["importFailedCsv"])
-    
+    import_failed_csv_path = os.path.join(
+        output_dir,
+        cfg["importICS"]["importFailedCsv"]
+    )
+
     ics_path = cfg["icsPath"]
     date_from = cfg["importICS"]["dateFrom"]
     date_to = cfg["importICS"]["dateTo"]
     require_location = cfg["importICS"].get("requireLocation", True)
-    import_failed_csv_path = os.path.join(
-        cfg["outputDir"] if "outputDir" in cfg else cfg.get("outputDir", "outputs"),
-        cfg["importICS"]["importFailedCsv"]
-    )
 
-    # If your repo uses outputDir only in makeMap.py, we can compute it there instead.
-    # CAREFUL: This assumes cfg["outputDir"] exists; if it doesn't, see next note below.
     agg.totalSelectedEvents = 0
     agg.totalImportFailed = 0
 
@@ -81,13 +76,12 @@ def load_selected_ics_events(cfg, output_dir, agg, logger):
         logger=logger,
         agg=agg,
     )
-
     agg.totalSelectedEvents = len(events)
+
     logger.info(
         f"Imported events selected by date range: {len(events)} from '{ics_path}'"
     )
     return events
-
 
 
 def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
@@ -100,6 +94,7 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
     rate_limit_seconds = float(geo_cfg["rateLimitSeconds"])
     geocoder_language = geo_cfg.get("geocoderLanguage", "en")
     use_cache = bool(geo_cfg.get("useGeocodeCache", True))
+
     geocode_cache_csv = os.path.join(output_dir, geo_cfg["geocodeCacheCsv"])
     failed_csv_path = os.path.join(output_dir, geo_cfg["geocodeFailedCsv"])
     map_data_csv_path = os.path.join(output_dir, geo_cfg["mapDataCsv"])
@@ -136,6 +131,7 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
             "summary",
             "uid",
             "date",
+            "date_end",
             "location_text",
             "lat",
             "lon",
@@ -152,16 +148,13 @@ def run_geocoding_and_write_map_data(cfg, events, agg, logger, output_dir):
         for r in map_rows:
             writer.writerow(r)
 
+        logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_csv_path}")
 
-    logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_csv_path}")
-    
     map_data_json_path = os.path.join(output_dir, geo_cfg["mapDataCsv"]).replace(".csv", ".json")
-
     with open(map_data_json_path, "w", encoding="utf-8") as f:
         json.dump(map_rows, f, ensure_ascii=False)
-        
-    logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_json_path}")
 
+    logger.info(f"Wrote map data rows: {len(map_rows)} to {map_data_json_path}")
     return map_rows
 
 
@@ -170,5 +163,3 @@ def create_map_html_with_assets(cfg, output_dir, logger):
     # CAREFUL: keep the call order identical to the old main() sequence.
     copy_map_assets_to_output_dir(output_dir, logger)
     write_map_html(cfg, output_dir, logger)
-    
-    

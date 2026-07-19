@@ -1471,6 +1471,6 @@ What next: do you want `DTEND` to be shown in the date filter logic too (interva
 
 # IMPORTANT:
 
-At least it still executed, but this attempt 1 of adding DTEND failed completely, the resulting code did not show any "date to". 
+OLD: At least it still executed, but this attempt 1 of adding DTEND failed completely, the resulting code did not show any "date to". 
 
-Probably this AI is too dumb, to return whole code files, but we need to continue to work semi-manually. 
+NEW: Actually, it had created the correct code, indeed - but the browser cache had hidden that. It works, hooray.
