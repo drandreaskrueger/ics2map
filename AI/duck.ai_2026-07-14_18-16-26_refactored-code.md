@@ -3,6 +3,9 @@
 ====================
 
 User prompt 1 of 16 - 07/07/2026, 02:31:13:
+
+# ICS2MAP coding session 2
+
 Show Locations in ICS calendar files on a map, ready software?
 
 GPT-5.4 nano:

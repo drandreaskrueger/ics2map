@@ -3,6 +3,9 @@
 ====================
 
 User prompt 1 of 16 - 16/07/2026, 14:51:33:
+
+# ICS2MAP coding session 4
+
 Help me improve the repo: https://github.com/drandreaskrueger/ics2map
 
 From now now, your coding principles are: 

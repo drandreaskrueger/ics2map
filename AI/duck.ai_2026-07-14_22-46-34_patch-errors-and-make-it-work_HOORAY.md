@@ -3,6 +3,9 @@
 ====================
 
 User prompt 1 of 16 - 14/07/2026, 21:20:15:
+
+# ICS2MAP coding session 3
+
 repo: https://github.com/drandreaskrueger/ics2map
 
 please help me: 

@@ -3,7 +3,7 @@
 ====================
 
 User prompt 1 of 13 - 18/07/2026, 03:16:16:
-# ICS2MAP coding session 8
+# ICS2MAP coding session 7b
 
 GPT-5.4 nano:
 Got it—what do you need for “ICS2MAP coding session 8”?
