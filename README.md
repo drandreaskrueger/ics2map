@@ -35,6 +35,8 @@ created at runtime:
 to avoid CORS error during development, go to http://localhost:8000/outputs/map.html and serve:
 
     python -m http.server 8000
+    
+Careful: When new .js or .css, you might have to delete browser download cache.
 
 ## repo creation log
 ### venv in windows using python 3.14
