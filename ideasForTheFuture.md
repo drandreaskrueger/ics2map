@@ -4,7 +4,9 @@
 
 (B) Map functionality
 
-all divided into: 
+(C) What AI suggested
+
+Chapters possibly divided into: 
 
 * essential
 * nice to have
@@ -72,13 +74,13 @@ Layout:
 
 New data (needs to be passed via python to .json too):
 
-* dateFrom AND dateTo 
+* dateFrom AND dateTo = finishing that today, then postpone all to later.
 
 * description of event = from ICS pass through: `DESCRIPTION:` content
   * if there are URLs in it, make clickable
   * show description only after expanding a triangle "description" button
-
-
+  * see "[User prompt 9 of 13 - 18/07/2026](AI/duck.ai_2026-07-18_04-07-04_UI-improvements-part-2_and_passing-through-more-data.md)" to "User prompt 13 of 13 - 18/07/2026"
+  * postponed, as normalization of the odd ICS DESCRIPTION formatting might take time.
 
 ### nice to have
 
@@ -104,6 +106,7 @@ Question: Why "Location: Berlin, Germany" versus "Geocoder: Berlin, Germany" alw
 
 * whole ICS object per point (load and parse in JS later??)
   * then possible: Select a couple of points, generate subset-ICS file for download.
+  * perhaps there is a JS parser library for ICS too?
 
 ### Fun stuff, really not essential, but worth mentioning:
 
@@ -123,3 +126,6 @@ Done:
   * With a shorter range, e.g. dateFrom,dateTo same day, and press "Apply" no redraw happens. Button not connected?
   * The status sentence ("Showing 4 event(s)") should become ("Showing 2 of 4 event(s)")
   * New button "Show All" takes the largest occuring date intervall, and populates the date fields, and presses "Apply"
+
+
+# (C) What AI suggested
