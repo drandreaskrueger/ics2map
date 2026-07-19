@@ -49,6 +49,59 @@ hide via .gitignore:
     - Overall goal of this session: keep the same pipeline/behavior, but make the code safer to edit and easier to extend, while removing template-injection pitfalls.
 
     1. `duck.ai_2026-07-16_13-03-00_coding-principles.md`
-    - This file records an “agreement” on coding principles that later refactors should follow, emphasizing:
+    - This file records an “agreement” on coding principles that later refactors should follow, emphasizing: ...
 
+4. https://github.com/drandreaskrueger/ics2map/blob/main/AI/duck.ai_2026-07-16_15-46-21_refactor-into-templates-make-standalone-executable-etc.md
+   - Refactor goal: extract inline HTML/CSS/JS used by the generated map into standalone template/assets, so Python mainly injects placeholders/wires outputs.
+   - Template split approach:
+     - HTML shell becomes a separate template file (e.g. `mapTemplate.html`) with placeholders.
+     - Styling moves into a standalone CSS file (e.g. `mapStyles.css`).
+     - Scripting moves into a standalone JS file (e.g. `mapScripts.js`).
+   - Output correctness:
+     - Adjust the map generation so the output directory contains/copies these static assets (so relative paths in the generated `map.html` keep working).
+   - Follow-up modularization direction (kept as “next steps” within the session):
+     - Move further pipeline responsibilities toward smaller helper modules (keeping the overall structure stable while improving maintainability).
+   - Core intention: keep behavior the same, reduce “inline template spaghetti”, and make subsequent UI/JS changes safer.
 
+5. https://github.com/drandreaskrueger/ics2map/blob/main/AI/duck.ai_2026-07-16_20-07-51_make-main-smaller-clean-up-etc.md
+   - Refactor goal: make `main()` small and turn it into a readable orchestration sequence.
+   - What to extract/clean:
+     - pipeline setup/config/logging/wiring should move out of `main()` into helpers/tools.
+     - keep the same processing flow, but reduce inline logic in the entry point.
+   - Outcome: the program flow becomes easier to reason about and safer to refactor further (less responsibility concentrated in `makeMap.py:main()`).
+
+6. https://github.com/drandreaskrueger/ics2map/blob/main/AI/duck.ai_2026-07-17_15-13-54_coding-session-6_fix-issues-in-Python-and-CSS_SUCCESS.md
+   - CSV robustness:
+     - fix output so event text containing commas/newlines doesn’t break column alignment (ensuring stable CSV structure).
+   - Map/UX correctness:
+     - address marker/event interaction issues (e.g., overlap handling / clickability),
+     - fix date chooser layout/overlap so UI controls behave reliably.
+   - Data pass-through to the frontend:
+     - ensure richer payload fields from Python are available to the map UI (so JS can render more context consistently).
+   - CSS/HTML stability:
+     - tighten styling/structure so UI elements remain aligned after the data/UI changes.
+
+7. Coding Sessions 7a and 7b:
+   - 7.1 = 7a = https://github.com/drandreaskrueger/ics2map/blob/main/AI/duck.ai_2026-07-18_03-15-29_UI-improvements-part-1.md
+     - Fix Apply behavior:
+       - ensure the UI controls have the expected structure/IDs so clicking “Apply” actually triggers the redraw.
+       - handle edge cases like “same day” so Apply doesn’t silently do nothing.
+     - Date-range handling robustness:
+       - normalize date inputs/comparisons so filtering matches the displayed values.
+     - Update status text:
+       - show filtered-vs-total counts in `#status` (not just a single number).
+     - Debug-driven wiring:
+       - add/verify console logging so it’s obvious that JS listeners are attached and correct values reach the filtering/redraw code.
+       - resolve cases where injected listener code wasn’t effectively inside the active `<script>` context.
+   - 7.2 = 7b = https://github.com/drandreaskrueger/ics2map/blob/main/AI/duck.ai_2026-07-18_04-07-04_UI-improvements-part-2_and_passing-through-more-data.md
+     - “Show All” date span fix:
+       - correct the logic to use the global min/max endpoints (not the wrong “largest contiguous run” assumption).
+     - Frontend robustness fix:
+       - correct destructuring mismatch so inputs weren’t getting `undefined` and causing empty/invalid date fields.
+     - Pass through more ICS data:
+       - include additional fields (notably `DTEND` as `date_end`, plus `DESCRIPTION`) in the event model/payload.
+       - extend the JS rendering to display these fields in the map UI.
+     - DESCRIPTION UX improvement plan:
+       - support a more readable description UI (e.g., collapsible/expandable), while keeping injection safe by escaping/linkifying appropriately.
+
+8. = today (placeholder only)
