@@ -48,6 +48,8 @@ Add CLI entrypoint, use argparse so users can override config without editing fi
 
 geocodeCredentials.toml could be left out completely, no API key needed
 
+instead of the injection (`build_controls_block(), write_map_html()`) move that code into mapTemplate.html and mapScripts.js ?
+
 ### possible trouble noticed by AI
 
 * `importICS.py` #CAREFUL: right now total\_\in\_source = len(list(cal.events)) iterates events once; if you notice weird behavior, switch to just using len(cal.events) (depending on the ics library object type).
@@ -74,7 +76,7 @@ Layout:
 
 New data (needs to be passed via python to .json too):
 
-* dateFrom AND dateTo = finishing that today, then postpone all to later.
+* dateFrom AND dateTo = finishing that today, then postpone all else to later.
 
 * description of event = from ICS pass through: `DESCRIPTION:` content
   * if there are URLs in it, make clickable
@@ -129,3 +131,23 @@ Done:
 
 
 # (C) What AI suggested
+
+* see [User prompt 1 of 16 - 14/07/2026](https://github.com/drandreaskrueger/ics2map/blob/main/AI/duck.ai_2026-07-14_22-46-34_patch-errors-and-make-it-work_HOORAY.md)
+  * and ask the same question again, now
+
+# (D) Ideas what to ask the AI
+
+* please read all *.md files in https://github.com/drandreaskrueger/ics2map/tree/main/AI 
+  * and analyze our conversation
+    * why was the refactoring so tedious?
+    * feels as if writing all from scratch, in better initial architecture planning, would have taken less time?
+  * what do you suggest to add to my "coding-principles.md" ?
+
+* please read the https://github.com/drandreaskrueger/ics2map/blob/main/AI/coding-principles.md
+  * streamline it; without dropping any aspect, use less words
+  * re-sort it; give it a better structure and sequence
+  * what invisible assumption do you spot, that I could write explicitly?
+  * where are inner inconsistencies or contradictions?
+
+
+
