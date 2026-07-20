@@ -111,3 +111,5 @@ hide via .gitignore:
 8. Coding Sessions 8a and 8b:
    - 8.1 = 8a = [duck.ai_2026-07-19_18-09-07_in-README-AI-give-overview_plus-failed-attempt-1.md](duck.ai_2026-07-19_18-09-07_in-README-AI-give-overview_plus-failed-attempt-1.md)
    - 8.2 = 8b = [duck.ai_2026-07-19_18-09-43_DTEND-passthrough-failed-attempt-2.md](duck.ai_2026-07-19_18-09-43_DTEND-passthrough-failed-attempt-2.md)
+
+9. [duck.ai_2026-07-20_11-49-45_AI-ideas_cachebusting_geocodecache-debugging.md](duck.ai_2026-07-20_11-49-45_AI-ideas_cachebusting_geocodecache-debugging.md) 
