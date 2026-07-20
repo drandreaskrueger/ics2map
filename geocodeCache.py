@@ -99,7 +99,11 @@ class GeocodeCache:
         self._db[key] = result
 
     def save(self):
+        """
+        Write the full cache back to CSV.
+        """
         os.makedirs(os.path.dirname(self.cache_csv_path) or ".", exist_ok=True)
+    
         with open(self.cache_csv_path, "w", encoding="utf-8", newline="") as f:
             fieldnames = ["location_text", "lat", "lon", "display_name", "country_code"]
             writer = csv.DictWriter(
@@ -109,18 +113,21 @@ class GeocodeCache:
                 quoting=csv.QUOTE_ALL,
             )
             writer.writeheader()
-            for _, v in self._db.items():
+    
+            for k, v in self._db.items():
+                # CAREFUL: k is the normalized cache key used by get()/set().
                 writer.writerow({
+                    "location_text": k,
                     "lat": v.lat,
                     "lon": v.lon,
                     "display_name": v.display_name,
-                    "country_code": v.country_code
+                    "country_code": v.country_code,
                 })
-
-        # console summary so you can see hits vs misses even without log file
+    
         print(
             "GeocodeCache.save(): "
             f"entries={len(self._db)} hits={self.hit_count} "
             f"misses={self.miss_count} successful_cache_lookups={self.successful_lookup_count}",
             flush=True
         )
+        
