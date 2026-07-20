@@ -170,9 +170,10 @@ function debugSampleDates(points, limit = 20) {
 /* debugging end, see duck.ai 2026/07/18 */
 
 async function loadMapData() {
-  /* load mapData.json converted to JS objects */
+/* load mapData.json converted to JS objects */
   console.log("loadMapData: start");
-  const resp = await fetch('mapData.json');
+  const cacheBuster = `v=${Date.now()}`; // forces browser to revalidate/load latest mapData.json
+  const resp = await fetch(`mapData.json?${cacheBuster}`, { cache: 'no-store' });
   const data = await resp.json();
 
   // debugSampleDates(data, 30); // debug only
