@@ -113,8 +113,8 @@ function renderFiltered(fromStr, toStr) {
     const popupHtml = `
 <div style="max-width:280px;">
   <div style="font-weight:700; margin-bottom:4px;">${escapeHtml(summary || 'Event')}</div>
-  <div style="font-size:12px;"><b>Date:</b> ${escapeHtml(date)}</div>
-  ${dateEnd ? `<div style="font-size:12px; margin-top:4px;"><b>End date:</b> ${escapeHtml(dateEnd)}</div>` : ""}
+  <div style="font-size:12px;"><b>Date:</b> ${escapeHtml(date)} &nbsp; &nbsp;
+  ${dateEnd ? `<b>End date:</b> ${escapeHtml(dateEnd)}` : ""}</div>
   <div style="font-size:12px; margin-top:4px;"><b>Location ICS:</b> ${escapeHtml(icsLoc)}</div>
   <div style="font-size:12px; margin-top:4px;"><b>Location Geocoder:</b> ${escapeHtml(geocoderDisplay)}</div>
 </div>
