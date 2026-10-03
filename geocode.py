@@ -1,7 +1,10 @@
 import csv
 import os
+import re
 import time
 from typing import List, Dict, Optional, Tuple
+
+from datetime import datetime, timezone
 
 from geopy.geocoders import Nominatim
 
@@ -21,6 +24,59 @@ def _safe_get_country_code(geocode_raw: dict) -> str:
     return cc
 
 
+# URL - not geocodable address (don't waste a rate-limited call)
+_ONLINE_RE = re.compile(r"^\s*(?:[a-z][a-z0-9+.-]*://|www\.)", re.I)
+# UK postcode fallback
+_UK_POSTCODE_RE = re.compile(r"\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b", re.I)
+_COUNTRY_ALIASES = {"UK": "GB", "GB": "UK"}
+
+
+def _country_allowed(cc: str, allowed_set: set) -> bool:
+    """default: allow"""
+    if not cc or not allowed_set:
+        return True
+    cc = cc.upper()
+    return cc in allowed_set or _COUNTRY_ALIASES.get(cc) in allowed_set
+
+
+def _norm_loc(s: str) -> str:
+    return " ".join((s or "").split())
+
+
+def _load_fail_cache(path: str) -> Dict[str, dict]:
+    """negative-result cache (dodgy room names, out-of-country, etc.)"""
+    db: Dict[str, dict] = {}
+    if not os.path.exists(path):
+        return db
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            key = _norm_loc(row.get("location_text", ""))
+            if key:
+                db[key] = {"reason": row.get("reason", ""),
+                           "failed_at": row.get("failed_at", ""),
+                           "hits": int(row.get("hits") or 0)}
+    return db
+
+
+def _save_fail_cache(path: str, db: Dict[str, dict]) -> None:
+    """see _load_fail_cache"""
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["location_text", "reason", "failed_at", "hits"],
+                           quotechar='"', quoting=csv.QUOTE_ALL)
+        w.writeheader()
+        for loc, e in sorted(db.items()):
+            w.writerow({"location_text": loc, **e})
+
+
+def _fail_fresh(entry: dict, ttl_hours: float) -> bool:
+    try:
+        then = datetime.fromisoformat(entry["failed_at"])
+    except (KeyError, ValueError, TypeError):
+        return False
+    return (datetime.now(timezone.utc) - then).total_seconds() < ttl_hours * 3600
+
+
 def geocode_events(
     events: List[IcsEvent],
     allowed_country_codes: List[str],
@@ -30,12 +86,14 @@ def geocode_events(
     failed_csv_path: str,
     logger: Logger,
     agg: LogAgg,
-    dedupe_by_location_text: bool = True
+    dedupe_by_location_text: bool = True,
+    fail_cache_path: Optional[str] = None,
+    fail_cache_ttl_hours: float = 720.0
 ) -> Tuple[List[dict], List[dict]]:
     """
     Main geocoding loop:
     - geocode only unique LOCATION strings (if dedupe_by_location_text=True)
-    - reuse cached successful results
+    - reuse cached successful results; skip recently-failed ones (if fail_cache_path)
     - write per-event failures to geocodeFailed.csv (human readable)
     - return map rows (per event, not per location)
 
@@ -60,6 +118,9 @@ def geocode_events(
     # NOTE: user-agent can be overridden in a follow-up step.
     allowed_set = set([c.upper() for c in allowed_country_codes])
 
+    fail_db: Dict[str, dict] = _load_fail_cache(fail_cache_path) if fail_cache_path else {}
+    fail_dirty = False
+
     # Per LOCATION cache
     loc_to_success: Dict[str, GeocodeResult] = {}
     loc_to_error: Dict[str, str] = {}
@@ -82,25 +143,49 @@ def geocode_events(
                 loc_to_success[loc_text] = cached
                 continue
 
+        if _ONLINE_RE.match(loc_text):
+            loc_to_error[loc_text] = "url_not_a_location (online event)"
+            agg.totalGeocodeFailed += 1
+            logger.warn(f"Geocode SKIP location='{loc_text}' reason=online_event_url")
+            continue
+
+        # recently-failed location: skip without burning a rate-limited call
+        if fail_db and (f := fail_db.get(_norm_loc(loc_text))) and _fail_fresh(f, fail_cache_ttl_hours):
+            f["hits"] += 1
+            fail_dirty = True
+            loc_to_error[loc_text] = f"failed-in-past-run ({f['reason']})"
+            agg.totalGeocodeFailed += 1
+            logger.warn(f"Geocode SKIP location='{loc_text}' reason=fail_cache:{f['reason']}")
+            continue
+
+        # query as-is; fallback to postcode
+        candidates = [loc_text]
+        m = _UK_POSTCODE_RE.search(loc_text)
+        if m:
+            pc = re.sub(r"\s+", " ", m.group(1))
+            if pc.upper() != loc_text.strip().upper():
+                candidates.append(pc)
+
         # Geocode with throttling
-        try:
-            r = geolocator.geocode(loc_text, timeout=20, language=geocoder_language)
-            time.sleep(rate_limit_seconds)
+        last_error = "not_found"
+        for query in candidates:
+            try:
+                r = geolocator.geocode(query, timeout=20, language=geocoder_language)
+                time.sleep(rate_limit_seconds)
+            except Exception as ex:
+                last_error = f"exception:{type(ex).__name__}"
+                logger.error(f"Geocode EX location='{loc_text}' query='{query}' exception={last_error}")
+                continue
 
             if not r:
-                loc_to_error[loc_text] = "not_found"
-                agg.totalGeocodeFailed += 1
-                logger.warn(f"Geocode FAIL location='{loc_text}' reason=not_found")
                 continue
 
             raw = (r.raw or {})
             cc = _safe_get_country_code(raw)
 
             # Country filtering
-            if allowed_set and cc and cc not in allowed_set:
-                loc_to_error[loc_text] = f"outside_allowed_countries (cc={cc})"
-                agg.totalGeocodeFailed += 1
-                logger.warn(f"Geocode FAIL location='{loc_text}' reason=outside_allowed_countries cc={cc}")
+            if not _country_allowed(cc, allowed_set):
+                last_error = f"outside_allowed_countries (cc={cc})"
                 continue
 
             result = GeocodeResult(
@@ -113,18 +198,24 @@ def geocode_events(
             loc_to_success[loc_text] = result
             if geocode_cache:
                 geocode_cache.set(loc_text, result)
+            if fail_db.pop(_norm_loc(loc_text), None) is not None:  # resolves now → un-cache the failure
+                fail_dirty = True
 
             agg.totalGeocodeSucceeded += 1
             logger.info(
-                f"Geocode OK location='{loc_text}' -> ({result.lat},{result.lon}) cc={result.country_code}"
+                f"Geocode OK location='{loc_text}' (via '{query}') -> ({result.lat},{result.lon}) cc={result.country_code}"
             )
-
-        except Exception as ex:
-            # IMPORTANT: record exception name for debugging.
-            err_name = type(ex).__name__
-            loc_to_error[loc_text] = f"exception:{err_name}"
+            break
+        else:
+            loc_to_error[loc_text] = last_error
             agg.totalGeocodeFailed += 1
-            logger.error(f"Geocode EX location='{loc_text}' exception={err_name}")
+            logger.warn(f"Geocode FAIL location='{loc_text}' reason={last_error}")
+            if fail_cache_path:
+                prior = fail_db.get(_norm_loc(loc_text), {}).get("hits", 0)
+                fail_db[_norm_loc(loc_text)] = {"reason": last_error,
+                                                "failed_at": datetime.now(timezone.utc).isoformat(),
+                                                "hits": prior}
+                fail_dirty = True
 
     # Build map rows per event
     map_rows: List[dict] = []
@@ -181,5 +272,8 @@ def geocode_events(
         )
         for row in failed_rows:
             writer.writerow(row)
+
+    if fail_cache_path and fail_dirty:
+        _save_fail_cache(fail_cache_path, fail_db)
 
     return map_rows, failed_rows
